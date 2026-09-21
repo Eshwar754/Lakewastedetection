@@ -30,7 +30,7 @@ class AIService:
         if img is None:
             raise ValueError("Invalid image file data.")
 
-        annotated_img, meta = self.predictor.predict_image(img)
+        annotated_img, meta = self.predictor.predict_image(img, image_name=filename)
 
         # Encode annotated image to base64 or JPEG bytes
         ret, buf = cv2.imencode('.jpg', annotated_img)

@@ -71,15 +71,21 @@ def process_video_file(video_path, output_path=None, weights_path=None):
         for det in tracked_dets:
             track_id = det.get('track_id')
             x1, y1, x2, y2 = det['bbox']
-            cv2.putText(annotated_frame, f"ID #{track_id}", (x1, y2 + 15),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(annotated_frame, f"ID #{track_id}", (x1, y2 + 18),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 0, 0), 4, cv2.LINE_AA)
+            cv2.putText(annotated_frame, f"ID #{track_id}", (x1, y2 + 18),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 255, 0), 2, cv2.LINE_AA)
 
         t1 = time.time()
         curr_fps = round(1.0 / (t1 - t0 + 1e-6), 1)
 
         # Draw status overlay
-        cv2.putText(annotated_frame, f"SmartLake AI | FPS: {curr_fps} | Waste Count: {len(tracked_dets)}",
-                    (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
+        hud_text = f"SmartLake AI | FPS: {curr_fps} | Waste Count: {len(tracked_dets)}"
+        cv2.putText(annotated_frame, hud_text, (10, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 4, cv2.LINE_AA)
+        cv2.putText(annotated_frame, hud_text, (10, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2, cv2.LINE_AA)
+
 
         if out_writer:
             out_writer.write(annotated_frame)

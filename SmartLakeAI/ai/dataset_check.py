@@ -191,18 +191,32 @@ def convert_annotations_to_mapped(dataset_dir, mapping_config):
     print(f"[+] Converted {converted_count} label files to target class schema.")
 
 
+def find_dataset_dir(base_dir):
+    """Dynamically locates dataset directory within workspace or fallback paths."""
+    candidates = [
+        base_dir / 'trash_inst_material' / 'trash_inst_material',
+        base_dir / 'trash_inst_material',
+        base_dir / 'dataset',
+        Path(r"c:\Users\smesh\Downloads\trash_inst_material\trash_inst_material")
+    ]
+    for candidate in candidates:
+        if (candidate / 'train' / 'images').exists():
+            return candidate
+    return candidates[0]
+
+
 if __name__ == '__main__':
     base_dir = Path(__file__).resolve().parent.parent
     mapping_path = base_dir / 'dataset' / 'class_mapping.json'
     
     # Locate dataset
-    trash_dataset = Path(r"c:\Users\smesh\Downloads\trash_inst_material\trash_inst_material")
-    if not trash_dataset.exists():
-        trash_dataset = base_dir / 'dataset'
+    trash_dataset = find_dataset_dir(base_dir)
 
     if mapping_path.exists():
         mapping_config = load_class_mapping(mapping_path)
         check_dataset_integrity(trash_dataset, mapping_config)
+        convert_annotations_to_mapped(trash_dataset, mapping_config)
         generate_dataset_yaml(trash_dataset, base_dir / 'dataset' / 'dataset.yaml', mapping_config)
     else:
         print(f"[ERROR] Mapping configuration file not found at: {mapping_path}")
+

@@ -248,13 +248,21 @@ async function handleFileUpload(file) {
       });
       const data = await res.json();
 
-      statusDiv.innerText = `Done! Found ${data.total_objects} objects. Session ID: ${data.session_id}`;
+      statusDiv.innerText = `Done! Found ${data.total_objects} objects in image ${data.filename || file.name}. Session ID: ${data.session_id}`;
       
+      const badge = document.getElementById('imageNameBadge');
+      const valImgName = document.getElementById('valImageName');
+      if (badge && valImgName) {
+        valImgName.innerText = data.filename || file.name;
+        badge.style.display = 'inline-block';
+      }
+
       if (data.annotated_image_base64) {
         previewImg.src = data.annotated_image_base64;
         previewImg.style.display = 'block';
         previewPlaceholder.style.display = 'none';
       }
+
 
       fetchStatistics();
       fetchDetectionsLog();

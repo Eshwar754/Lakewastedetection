@@ -92,13 +92,18 @@ class CameraStreamProcessor:
             for det in tracked_dets:
                 tid = det.get('track_id')
                 x1, y1, x2, y2 = det['bbox']
-                cv2.putText(annotated_frame, f"ID #{tid}", (x1, y2 + 15),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                cv2.putText(annotated_frame, f"ID #{tid}", (x1, y2 + 18),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 0, 0), 4, cv2.LINE_AA)
+                cv2.putText(annotated_frame, f"ID #{tid}", (x1, y2 + 18),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 255, 0), 2, cv2.LINE_AA)
 
             # HUD overlay
             hud_text = f"SmartLake AI | FPS: {self.current_fps} | Latency: {self.inference_time_ms}ms | Waste: {self.latest_stats['total_waste']}"
             cv2.putText(annotated_frame, hud_text, (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 4, cv2.LINE_AA)
+            cv2.putText(annotated_frame, hud_text, (10, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2, cv2.LINE_AA)
+
 
             # Encode frame to JPEG
             ret_encode, buffer = cv2.imencode('.jpg', annotated_frame)

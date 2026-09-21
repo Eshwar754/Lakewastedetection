@@ -101,11 +101,13 @@ if __name__ == '__main__':
 
     if not dataset_yaml_path.exists():
         print(f"[!] dataset.yaml not found. Running dataset_check.py first...")
-        from dataset_check import check_dataset_integrity, generate_dataset_yaml, load_class_mapping
-        trash_dataset = Path(r"c:\Users\smesh\Downloads\trash_inst_material\trash_inst_material")
+        from ai.dataset_check import find_dataset_dir, generate_dataset_yaml, load_class_mapping, convert_annotations_to_mapped
+        trash_dataset = find_dataset_dir(base_dir)
         mapping_path = base_dir / 'dataset' / 'class_mapping.json'
         if mapping_path.exists():
             mapping_config = load_class_mapping(mapping_path)
+            convert_annotations_to_mapped(trash_dataset, mapping_config)
             generate_dataset_yaml(trash_dataset, dataset_yaml_path, mapping_config)
 
     train_model(config_path, dataset_yaml_path)
+

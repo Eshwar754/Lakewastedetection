@@ -121,11 +121,15 @@
         <div
           style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding: 1rem;">
           <h4 style="margin-bottom: 0.5rem;">Uploaded Image Segmentation Preview</h4>
+          <div id="imageNameBadge" style="display: none; margin-bottom: 0.6rem; font-size: 0.95rem; font-weight: 700; color: var(--primary-cyan); background: rgba(0, 242, 254, 0.12); border: 1px solid rgba(0, 242, 254, 0.35); padding: 0.35rem 0.9rem; border-radius: var(--radius-sm); text-transform: uppercase;">
+            📷 IMAGE NAME: <span id="valImageName" style="color: #ffffff; font-weight: 700; letter-spacing: 0.5px;">-</span>
+          </div>
           <img id="uploadPreviewImg"
-            style="max-width: 100%; max-height: 250px; border-radius: var(--radius-sm); display: none;" alt="Preview">
+            style="max-width: 100%; max-height: 260px; border-radius: var(--radius-sm); display: none;" alt="Preview">
           <div id="uploadPreviewPlaceholder" style="color: var(--text-muted); font-size: 0.9rem;">No image processed yet
           </div>
         </div>
+
       </div>
     </div>
 
