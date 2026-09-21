@@ -1,0 +1,17 @@
+path: C:\Users\smesh\Downloads\trash_inst_material\trash_inst_material
+train: train/images
+val: val/images
+names:
+  0: Plastic
+  1: Paper
+  2: Glass
+  3: Metal
+  4: Rubber
+  5: Fabric
+  6: Wood
+  7: Fishing_Gear
+  8: Thermocol/Foam
+  9: Other_Waste
+  10: Plant
+  11: Fish
+  12: Other_Animal

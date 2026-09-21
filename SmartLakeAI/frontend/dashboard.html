@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartLake AI — Monitoring Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon">🌊</div>
+      <div class="logo-text">
+        <h1>SmartLake AI</h1>
+        <p>Real-Time Lake Waste Monitoring System</p>
+      </div>
+    </div>
+    <nav>
+      <a href="/" class="nav-link">Home</a>
+      <a href="/dashboard" class="nav-link active">Dashboard</a>
+      <a href="#upload" class="nav-link">Upload Media</a>
+      <a href="#statistics" class="nav-link">Statistics</a>
+    </nav>
+    <button id="btnGenerateReport" class="btn-primary">📄 Generate Report</button>
+  </header>
+
+  <div class="container">
+
+    <!-- Top Summary Metrics Grid -->
+    <div class="grid-4">
+      <div class="card metric-card">
+        <div class="metric-label">Total Waste Detected</div>
+        <div class="metric-value" id="valTotalWaste">0</div>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Active Session Count</span>
+      </div>
+
+      <div class="card metric-card">
+        <div class="metric-label">Dominant Waste Category</div>
+        <div class="metric-value" id="valDominantWaste" style="font-size: 1.5rem;">-</div>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Most Common Material</span>
+      </div>
+
+      <div class="card metric-card">
+        <div class="metric-label">Visual Pollution Level</div>
+        <div style="margin: 0.5rem 0;">
+          <span class="badge badge-low" id="badgePollutionLevel">Low Pollution</span>
+        </div>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">AI Visual Waste Density Indicator</span>
+      </div>
+
+      <div class="card metric-card">
+        <div class="metric-label">Hardware Acceleration</div>
+        <div class="metric-value" id="valDeviceName" style="font-size: 1.4rem;">Checking...</div>
+        <span style="font-size: 0.8rem; color: var(--text-muted);" id="valFpsStatus">Inference: Local</span>
+      </div>
+    </div>
+
+    <!-- Main Section: Live Stream & Control Panel -->
+    <div class="grid-2">
+
+      <!-- Live Video Feed Container -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📹 Live Lake Camera Stream</div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button id="btnStartCam" class="btn-primary" style="padding: 0.4rem 1rem; font-size: 0.85rem;">Start
+              Camera</button>
+            <button id="btnStopCam" class="btn-secondary" style="padding: 0.4rem 1rem; font-size: 0.85rem;">Stop
+              Camera</button>
+          </div>
+        </div>
+
+        <div class="video-container" id="streamContainer">
+          <img id="liveStreamImg" class="video-stream" src="" alt="Live Stream" style="display: none;">
+          <div id="placeholderStream" class="placeholder-stream">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📷</div>
+            <p>Camera Stream Offline</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Click 'Start Camera' or upload
+              an image/video below</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Category Breakdown & Settings -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📊 Material Category Breakdown</div>
+        </div>
+        <div style="position: relative; height: 260px;">
+          <canvas id="chartMaterialBreakdown"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Media Upload Portal Section -->
+    <div id="upload" class="card">
+      <div class="card-header">
+        <div class="card-title">📤 Upload Image or Video File</div>
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Supports JPG, PNG, MP4, AVI</span>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="upload-box" id="dropArea">
+            <div class="upload-icon">📁</div>
+            <h3>Drag & Drop Image/Video Here</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">or click to select file from
+              your computer</p>
+            <input type="file" id="fileInput" accept="image/*,video/*" style="display: none;">
+          </div>
+          <div id="uploadStatus" style="margin-top: 1rem; font-size: 0.9rem; color: var(--primary-cyan);"></div>
+        </div>
+
+        <div
+          style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding: 1rem;">
+          <h4 style="margin-bottom: 0.5rem;">Uploaded Image Segmentation Preview</h4>
+          <img id="uploadPreviewImg"
+            style="max-width: 100%; max-height: 250px; border-radius: var(--radius-sm); display: none;" alt="Preview">
+          <div id="uploadPreviewPlaceholder" style="color: var(--text-muted); font-size: 0.9rem;">No image processed yet
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Detections Log Table -->
+    <div id="statistics" class="card">
+      <div class="card-header">
+        <div class="card-title">📋 Historical Detection Log</div>
+        <button id="btnRefreshLogs" class="btn-secondary" style="padding: 0.3rem 0.8rem; font-size: 0.85rem;">Refresh
+          Logs</button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Session ID</th>
+              <th>Timestamp</th>
+              <th>Source</th>
+              <th>Detected Material</th>
+              <th>Confidence %</th>
+              <th>Bounding Box [x1, y1, x2, y2]</th>
+            </tr>
+          </thead>
+          <tbody id="tblDetectionsBody">
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--text-muted);">Loading historical records...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>SmartLake AI System &copy; 2026 | Developed for Lake Pollution Monitoring and Autonomous Cleaning Boat Operations
+    </p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+
+</html>

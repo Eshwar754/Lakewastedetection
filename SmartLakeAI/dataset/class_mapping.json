@@ -1,0 +1,57 @@
+{
+  "original_classes": {
+    "0": "rov",
+    "1": "plant",
+    "2": "animal_fish",
+    "3": "animal_starfish",
+    "4": "animal_shells",
+    "5": "animal_crab",
+    "6": "animal_eel",
+    "7": "animal_etc",
+    "8": "trash_etc",
+    "9": "trash_fabric",
+    "10": "trash_fishing_gear",
+    "11": "trash_metal",
+    "12": "trash_paper",
+    "13": "trash_plastic",
+    "14": "trash_rubber",
+    "15": "trash_wood"
+  },
+  "target_classes": [
+    "Plastic",
+    "Paper",
+    "Glass",
+    "Metal",
+    "Rubber",
+    "Fabric",
+    "Wood",
+    "Fishing_Gear",
+    "Thermocol/Foam",
+    "Other_Waste",
+    "Plant",
+    "Fish",
+    "Other_Animal"
+  ],
+  "mapping": {
+    "0": "Other_Waste",
+    "1": "Plant",
+    "2": "Fish",
+    "3": "Other_Animal",
+    "4": "Other_Animal",
+    "5": "Other_Animal",
+    "6": "Other_Animal",
+    "7": "Other_Animal",
+    "8": "Other_Waste",
+    "9": "Fabric",
+    "10": "Fishing_Gear",
+    "11": "Metal",
+    "12": "Paper",
+    "13": "Plastic",
+    "14": "Rubber",
+    "15": "Wood"
+  },
+  "unrepresented_classes": [
+    "Glass",
+    "Thermocol/Foam"
+  ]
+}

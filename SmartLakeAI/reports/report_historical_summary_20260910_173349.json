@@ -1,0 +1,24 @@
+{
+  "report_title": "SmartLake AI - Lake Pollution Monitoring Report",
+  "date_time": "2026-09-10 17:33:49",
+  "session_id": "historical_summary",
+  "source_information": "SmartLake System Aggregated Log",
+  "total_detected_objects": 0,
+  "total_waste_objects": 0,
+  "pollution_indicator": "Low Pollution",
+  "pollution_level": "Low",
+  "most_common_waste": "None",
+  "category_counts": {
+    "Plastic": 0,
+    "Paper": 0,
+    "Glass": 0,
+    "Metal": 0,
+    "Rubber": 0,
+    "Fabric": 0,
+    "Wood": 0,
+    "Fishing_Gear": 0,
+    "Other_Waste": 0
+  },
+  "waste_percentages": {},
+  "average_confidence": {}
+}

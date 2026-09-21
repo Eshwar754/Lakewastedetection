@@ -1,0 +1,38 @@
+# SmartLake AI Configuration Settings
+
+project:
+  name: "SmartLake AI"
+  subtitle: "Intelligent Lake Waste Detection, Classification and Pollution Monitoring System"
+  version: "1.0.0"
+
+model:
+  task: "segment"
+  pretrained_weights: "yolov8n-seg.pt"
+  custom_weights: "models/best.pt"
+  conf_threshold: 0.25
+  iou_threshold: 0.45
+  img_size: 640
+  device: "auto" # 'auto', 'cpu', or '0' (CUDA)
+
+training:
+  epochs: 30
+  batch_size: 16
+  learning_rate: 0.01
+  patience: 10
+  save_period: 5
+
+pollution_thresholds:
+  low: [0, 5]
+  moderate: [6, 15]
+  high: [16, 30]
+  critical: [31, 999999]
+
+database:
+  sqlite_path: "backend/database/smartlake.db"
+
+reports:
+  output_dir: "reports/"
+
+camera:
+  default_source: 0 # Webcam index or RTSP URL string
+  fps_limit: 30

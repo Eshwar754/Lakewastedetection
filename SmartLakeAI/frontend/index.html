@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartLake AI — Intelligent Lake Waste Detection & Pollution Monitoring</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon">🌊</div>
+      <div class="logo-text">
+        <h1>SmartLake AI</h1>
+        <p>Intelligent Lake Waste Detection & Monitoring</p>
+      </div>
+    </div>
+    <nav>
+      <a href="/" class="nav-link active">Home</a>
+      <a href="/dashboard" class="nav-link">Live Dashboard</a>
+      <a href="/dashboard#upload" class="nav-link">Upload Test</a>
+      <a href="/dashboard#analytics" class="nav-link">Statistics</a>
+    </nav>
+    <a href="/dashboard" class="btn-primary">Launch Dashboard 🚀</a>
+  </header>
+
+  <!-- Hero Section -->
+  <div class="container">
+    <div class="card" style="text-align: center; padding: 4rem 2rem; background: linear-gradient(135deg, rgba(18,26,47,0.9), rgba(10,15,29,0.95)); border-color: rgba(0,242,254,0.3);">
+      <h1 style="font-size: 3rem; font-weight: 700; margin-bottom: 1rem; background: linear-gradient(90deg, #ffffff, var(--primary-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        AI-Powered Water Body Waste Detection & Classification
+      </h1>
+      <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 800px; margin: 0 auto 2rem;">
+        Automated real-time computer vision system using modern YOLO instance segmentation to detect, classify, track, and monitor floating plastic, metal, paper, and organic waste materials in lakes and waterways.
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center;">
+        <a href="/dashboard" class="btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Open Live Monitoring Dashboard</a>
+        <a href="#features" class="btn-secondary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Explore Features</a>
+      </div>
+    </div>
+
+    <!-- System Features -->
+    <div id="features" class="grid-3">
+      <div class="card">
+        <div class="card-title">🎯 Multi-Object Segmentation</div>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">
+          Detects and outlines precise polygon segmentation masks and bounding boxes for multiple floating waste items simultaneously in high-resolution video streams.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🏷️ Material Classification</div>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">
+          Classifies objects into Plastic, Metal, Paper, Wood, Rubber, Fabric, Fishing Gear, and distinguishes waste from natural marine life like Fish and Plants.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📊 Pollution Level Density</div>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">
+          Calculates real-time AI-based visual waste density indicators (Low, Moderate, High, Critical) with persistent multi-object tracking to prevent duplicate counts.
+        </p>
+      </div>
+    </div>
+
+    <!-- Robot Readiness Section -->
+    <div class="card" style="margin-top: 2rem;">
+      <div class="card-header">
+        <div class="card-title">🤖 Autonomous Cleaning Robot Integration</div>
+      </div>
+      <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1rem;">
+        SmartLake AI is designed to integrate directly with lake-cleaning robots and autonomous collection boats. By exporting live object coordinates, material classifications, and waste density maps, autonomous vessels can navigate directly to high-density pollution zones for targeted cleanup.
+      </p>
+      <div class="grid-4" style="margin-top: 1rem;">
+        <div class="metric-card">
+          <div class="metric-label">Local Processing</div>
+          <div class="metric-value" style="font-size: 1.4rem;">On-Edge / GPU</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Inference Engine</div>
+          <div class="metric-value" style="font-size: 1.4rem;">YOLOv8-Seg</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Tracking Protocol</div>
+          <div class="metric-value" style="font-size: 1.4rem;">BYTETracker</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">API Standard</div>
+          <div class="metric-value" style="font-size: 1.4rem;">FastAPI REST</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>SmartLake AI — Intelligent Lake Waste Detection & Pollution Monitoring System &copy; 2026</p>
+  </footer>
+
+</body>
+</html>
