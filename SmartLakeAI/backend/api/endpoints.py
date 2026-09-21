@@ -125,6 +125,12 @@ def camera_stream():
     )
 
 
+@router.get("/predict/camera/status")
+def camera_status():
+    """Returns the latest live camera detections and stream performance."""
+    return ai_service.get_camera_status()
+
+
 @router.get("/statistics")
 def get_statistics():
     """Fetches aggregated statistics across all historical sessions."""

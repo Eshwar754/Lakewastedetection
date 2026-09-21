@@ -39,7 +39,10 @@ class SmartLakePredictor:
             if custom_weights.exists():
                 weights_path = str(custom_weights)
             else:
-                weights_path = 'yolov8n-seg.pt'
+                raise FileNotFoundError(
+                    f"Trained lake model not found at {custom_weights}. "
+                    "Run ai/train.py first or set model.custom_weights to a trained checkpoint."
+                )
 
         self.conf_threshold = self.config['model'].get('conf_threshold', 0.25)
         self.iou_threshold = self.config['model'].get('iou_threshold', 0.45)
@@ -54,6 +57,19 @@ class SmartLakePredictor:
         print(f"[+] Loading SmartLake AI Model from: {weights_path} (Device: {self.device})")
         self.model = YOLO(weights_path)
         self.class_names = self.model.names
+
+        dataset_config_path = base_dir / 'dataset' / 'dataset.yaml'
+        with open(dataset_config_path, 'r') as f:
+            dataset_config = yaml.safe_load(f)
+
+        expected_names = dataset_config.get('names', {})
+        expected_names = [expected_names[key] for key in sorted(expected_names, key=int)]
+        loaded_names = [self.class_names[key] for key in sorted(self.class_names, key=int)]
+        if loaded_names != expected_names:
+            raise ValueError(
+                "The loaded checkpoint does not match the lake dataset classes. "
+                f"Expected {expected_names}, got {loaded_names}."
+            )
 
     def predict_image(self, image_input, save_path=None):
         """
