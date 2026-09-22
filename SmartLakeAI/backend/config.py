@@ -20,5 +20,8 @@ DB_PATH = BASE_DIR / SYSTEM_CONFIG['database'].get('sqlite_path', 'backend/datab
 DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 MODEL_WEIGHTS_PATH = BASE_DIR / SYSTEM_CONFIG['model'].get('custom_weights', 'models/best.pt')
+if not MODEL_WEIGHTS_PATH.exists():
+    MODEL_WEIGHTS_PATH = BASE_DIR / SYSTEM_CONFIG['model'].get('pretrained_weights', 'yolov8n-seg.pt')
+
 REPORTS_DIR = BASE_DIR / SYSTEM_CONFIG['reports'].get('output_dir', 'reports/')
 REPORTS_DIR.mkdir(parents=True, exist_ok=True)

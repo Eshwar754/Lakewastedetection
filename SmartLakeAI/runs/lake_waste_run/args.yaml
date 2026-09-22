@@ -2,18 +2,18 @@ task: segment
 mode: train
 model: yolov8n-seg.pt
 data: C:\Users\smesh\Desktop\neww\Lakewastedetection\SmartLakeAI\dataset\dataset.yaml
-epochs: 5
+epochs: 3
 time: null
-patience: 10
+patience: 100
 batch: 16
-imgsz: 640
+imgsz: 320
 save: true
 save_period: -1
 cache: false
 device: cpu
 workers: 8
 project: C:\Users\smesh\Desktop\neww\Lakewastedetection\SmartLakeAI\runs
-name: smartlake_seg_run
+name: lake_waste_run
 exist_ok: true
 pretrained: true
 cls_remap: true
@@ -27,7 +27,7 @@ cos_lr: false
 close_mosaic: 10
 resume: false
 amp: true
-fraction: 1.0
+fraction: 0.2
 profile: false
 freeze: null
 multi_scale: 0.0
@@ -44,7 +44,7 @@ iou: 0.7
 max_det: 300
 quantize: null
 dnn: false
-plots: true
+plots: false
 nms: null
 source: null
 vid_stride: 1
@@ -112,4 +112,4 @@ auto_augment: randaugment
 erasing: 0.4
 cfg: null
 tracker: tracktrack.yaml
-save_dir: C:\Users\smesh\Desktop\neww\Lakewastedetection\SmartLakeAI\runs\smartlake_seg_run
+save_dir: C:\Users\smesh\Desktop\neww\Lakewastedetection\SmartLakeAI\runs\lake_waste_run

@@ -1,4 +1,4 @@
-path: C:\Users\smesh\Desktop\neww\Lakewastedetection\SmartLakeAI\trash_inst_material\trash_inst_material
+path: C:\Users\smesh\Desktop\neww\Lakewastedetection\SmartLakeAI\trash_inst_material
 train: train/images
 val: val/images
 names:

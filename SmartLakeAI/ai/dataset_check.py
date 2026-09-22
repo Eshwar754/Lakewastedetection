@@ -194,10 +194,9 @@ def convert_annotations_to_mapped(dataset_dir, mapping_config):
 def find_dataset_dir(base_dir):
     """Dynamically locates dataset directory within workspace or fallback paths."""
     candidates = [
-        base_dir / 'trash_inst_material' / 'trash_inst_material',
         base_dir / 'trash_inst_material',
         base_dir / 'dataset',
-        Path(r"c:\Users\smesh\Downloads\trash_inst_material\trash_inst_material")
+        Path(r"c:\Users\smesh\Downloads\trash_inst_material")
     ]
     for candidate in candidates:
         if (candidate / 'train' / 'images').exists():

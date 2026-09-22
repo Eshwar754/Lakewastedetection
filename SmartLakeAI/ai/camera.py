@@ -88,14 +88,16 @@ class CameraStreamProcessor:
             # Update latest statistics
             self.latest_stats = calculate_waste_statistics(tracked_dets)
 
-            # Draw tracked IDs on frame
+            # Draw tracked IDs & waste names on frame
             for det in tracked_dets:
                 tid = det.get('track_id')
+                cls_name = det.get('class', 'Waste').upper()
                 x1, y1, x2, y2 = det['bbox']
-                cv2.putText(annotated_frame, f"ID #{tid}", (x1, y2 + 18),
+                label_text = f" ID #{tid} | {cls_name} "
+                cv2.putText(annotated_frame, label_text, (x1, y2 + 20),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 0, 0), 4, cv2.LINE_AA)
-                cv2.putText(annotated_frame, f"ID #{tid}", (x1, y2 + 18),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 255, 0), 2, cv2.LINE_AA)
+                cv2.putText(annotated_frame, label_text, (x1, y2 + 20),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 242, 254), 2, cv2.LINE_AA)
 
             # HUD overlay
             hud_text = f"SmartLake AI | FPS: {self.current_fps} | Latency: {self.inference_time_ms}ms | Waste: {self.latest_stats['total_waste']}"

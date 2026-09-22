@@ -42,11 +42,7 @@ class SmartLakePredictor:
             elif pretrained_weights.exists():
                 print(f"[!] Warning: Custom model weights '{custom_weights}' not found. Falling back to base pretrained model '{pretrained_weights}'.")
                 weights_path = str(pretrained_weights)
-            else:
-                raise FileNotFoundError(
-                    f"Trained lake model not found at {custom_weights} and base model not found at {pretrained_weights}. "
-                    "Run ai/train.py first or set model.custom_weights to a trained checkpoint."
-                )
+                weights_path = 'yolov8n-seg.pt'
 
         self.conf_threshold = self.config['model'].get('conf_threshold', 0.25)
         self.iou_threshold = self.config['model'].get('iou_threshold', 0.45)
@@ -106,6 +102,22 @@ class SmartLakePredictor:
         annotated_img = img.copy()
         mask_overlay = np.zeros_like(img, dtype=np.uint8)
 
+        CLASS_COLORS = {
+            'Plastic': (254, 242, 0),        # Cyan
+            'Paper': (254, 175, 79),         # Blue
+            'Glass': (0, 69, 255),           # Red
+            'Metal': (129, 185, 16),         # Green
+            'Rubber': (11, 158, 245),        # Orange
+            'Fabric': (153, 72, 236),        # Pink
+            'Wood': (3, 183, 255),           # Amber
+            'Fishing_Gear': (172, 83, 127),  # Purple
+            'Thermocol/Foam': (107, 107, 255),# Coral
+            'Other_Waste': (241, 102, 99),   # Indigo
+            'Plant': (22, 204, 132),         # Lime
+            'Fish': (212, 182, 6),           # Turquoise
+            'Other_Animal': (166, 184, 20)   # Teal
+        }
+
         colors = [
             (255, 144, 30), (50, 205, 50), (255, 69, 0), (0, 215, 255),
             (218, 112, 214), (255, 215, 0), (147, 112, 219), (0, 250, 154),
@@ -127,7 +139,7 @@ class SmartLakePredictor:
                 cls_id = class_ids[i]
                 cls_name = self.class_names.get(cls_id, f"Class_{cls_id}")
 
-                color = colors[cls_id % len(colors)]
+                color = CLASS_COLORS.get(cls_name, colors[cls_id % len(colors)])
 
                 # Format coordinates [x1, y1, x2, y2]
                 x1, y1, x2, y2 = [int(v) for v in box]
@@ -145,24 +157,30 @@ class SmartLakePredictor:
                 box_thickness = max(2, int(min(h, w) / 250))
                 cv2.rectangle(annotated_img, (x1, y1), (x2, y2), color, box_thickness)
 
-                # Bold Label background & text with black outline stroke
-                label_str = f"{cls_name} {int(conf * 100)}%"
-                font_scale = max(0.5, min(0.75, min(h, w) / 700.0))
+                # Prominently Highlighted Waste Label Badge with Double Contour Outline
+                label_str = f" {cls_name.upper()}: {int(conf * 100)}% "
+                font_scale = max(0.55, min(0.85, min(h, w) / 650.0))
                 font_thickness = 2
                 (lbl_w, lbl_h), baseline = cv2.getTextSize(label_str, cv2.FONT_HERSHEY_SIMPLEX, font_scale, font_thickness)
                 
-                # Filled background rectangle
-                rect_top = max(y1 - lbl_h - 12, 0)
-                rect_bottom = max(y1, lbl_h + 12)
+                # Filled background rectangle badge
+                rect_top = max(y1 - lbl_h - 14, 0)
+                rect_bottom = max(y1, lbl_h + 14)
+                # Outer shadow box
+                cv2.rectangle(annotated_img, (x1 - 1, rect_top - 1), (x1 + lbl_w + 11, rect_bottom + 1), (0, 0, 0), -1)
+                # Colored badge fill
                 cv2.rectangle(annotated_img, (x1, rect_top), (x1 + lbl_w + 10, rect_bottom), color, -1)
-                cv2.rectangle(annotated_img, (x1, rect_top), (x1 + lbl_w + 10, rect_bottom), (0, 0, 0), 1)
+                # Black badge border outline
+                cv2.rectangle(annotated_img, (x1, rect_top), (x1 + lbl_w + 10, rect_bottom), (15, 23, 42), 2)
 
                 # Text position
                 tx, ty = x1 + 5, max(y1 - 6, lbl_h + 4)
-                # Black outline contour stroke for extra bold clarity
-                cv2.putText(annotated_img, label_str, (tx, ty), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 0, 0), font_thickness + 2, cv2.LINE_AA)
-                # White foreground text
-                cv2.putText(annotated_img, label_str, (tx, ty), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (255, 255, 255), font_thickness, cv2.LINE_AA)
+                # Black contour stroke for maximum visibility
+                cv2.putText(annotated_img, label_str, (tx, ty), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 0, 0), font_thickness + 3, cv2.LINE_AA)
+                # White/Black contrast foreground text depending on color brightness
+                brightness = (color[0] * 114 + color[1] * 587 + color[2] * 299) / 1000
+                txt_color = (0, 0, 0) if brightness > 160 else (255, 255, 255)
+                cv2.putText(annotated_img, label_str, (tx, ty), cv2.FONT_HERSHEY_SIMPLEX, font_scale, txt_color, font_thickness, cv2.LINE_AA)
 
                 detections.append({
                     "class": cls_name,
@@ -235,9 +253,9 @@ if __name__ == '__main__':
     # Try sample image first
     sample_img = base_dir / 'samples' / 'sample_lake_trash.jpg'
     if not sample_img.exists():
-        val_dir = base_dir / 'trash_inst_material' / 'trash_inst_material' / 'val' / 'images'
+        val_dir = base_dir / 'trash_inst_material' / 'val' / 'images'
         if not val_dir.exists():
-            val_dir = Path(r"c:\Users\smesh\Downloads\trash_inst_material\trash_inst_material\val\images")
+            val_dir = Path(r"c:\Users\smesh\Downloads\trash_inst_material\val\images")
         images = list(val_dir.glob('*.*')) if val_dir.exists() else []
         if images:
             sample_img = images[0]

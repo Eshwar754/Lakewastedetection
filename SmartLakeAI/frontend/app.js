@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Poll statistics every 5 seconds
   setInterval(fetchStatistics, 5000);
-  setInterval(fetchCameraStatus, 1000);
 });
 
 let materialChart = null;
@@ -70,49 +69,25 @@ async function fetchStatistics() {
     badge.innerText = `${pollLevel} Pollution`;
     badge.className = 'badge ' + `badge-${pollLevel.toLowerCase()}`;
 
-    updateMaterialChart(data.category_counts);
+    // Update Chart Data
+    if (materialChart && data.category_counts) {
+      const counts = data.category_counts;
+      const chartData = [
+        counts['Plastic'] || 0,
+        counts['Paper'] || 0,
+        counts['Metal'] || 0,
+        counts['Rubber'] || 0,
+        counts['Fabric'] || 0,
+        counts['Wood'] || 0,
+        counts['Fishing_Gear'] || 0,
+        counts['Other_Waste'] || 0
+      ];
+      materialChart.data.datasets[0].data = chartData;
+      materialChart.update();
+    }
   } catch (err) {
     console.error("Error fetching statistics:", err);
   }
-}
-
-// Fetch the current frame's live camera statistics.
-async function fetchCameraStatus() {
-  try {
-    const res = await fetch('/api/predict/camera/status');
-    if (!res.ok) return;
-
-    const data = await res.json();
-    if (!data.is_running || !data.statistics) return;
-
-    const stats = data.statistics;
-    document.getElementById('valTotalWaste').innerText = stats.total_waste || 0;
-    document.getElementById('valDominantWaste').innerText = stats.most_common_waste || 'None';
-
-    const badge = document.getElementById('badgePollutionLevel');
-    const pollLevel = stats.pollution_level || 'Low';
-    badge.innerText = `${pollLevel} Pollution`;
-    badge.className = 'badge ' + `badge-${pollLevel.toLowerCase()}`;
-    updateMaterialChart(stats.category_counts);
-  } catch (err) {
-    console.error("Error fetching camera status:", err);
-  }
-}
-
-function updateMaterialChart(counts) {
-  if (!materialChart || !counts) return;
-
-  materialChart.data.datasets[0].data = [
-    counts['Plastic'] || 0,
-    counts['Paper'] || 0,
-    counts['Metal'] || 0,
-    counts['Rubber'] || 0,
-    counts['Fabric'] || 0,
-    counts['Wood'] || 0,
-    counts['Fishing_Gear'] || 0,
-    counts['Other_Waste'] || 0
-  ];
-  materialChart.update();
 }
 
 // Fetch Detections History Log
@@ -153,25 +128,12 @@ function initEventListeners() {
   // Camera Controls
   btnStartCam.addEventListener('click', async () => {
     try {
-      const res = await fetch('/api/predict/camera/start', { method: 'POST' });
-      if (!res.ok) {
-        let detail = 'Camera start failed';
-        try {
-          const errorData = await res.json();
-          detail = errorData.detail || detail;
-        } catch (parseError) {
-          // Keep the generic message when the server returns a non-JSON error.
-        }
-        throw new Error(detail);
-      }
+      await fetch('/api/predict/camera/start', { method: 'POST' });
       liveImg.src = '/api/predict/camera/stream?' + new Date().getTime();
       liveImg.style.display = 'block';
       placeholder.style.display = 'none';
     } catch (err) {
-      const message = err instanceof TypeError
-        ? 'The SmartLake backend is not running. Start it with: python backend\\main.py'
-        : err.message;
-      alert(`Could not start camera stream.\n\n${message}`);
+      alert("Could not start camera stream.");
     }
   });
 
